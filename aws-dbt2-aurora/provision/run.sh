@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 
-edb-terraform ${TERRAFORM_PROJECT_PATH} ../infrastructure.yml
+edb-terraform ${TERRAFORM_PROJECT_PATH} ../infrastructure.yml --validate
 cd ${TERRAFORM_PROJECT_PATH}
-terraform init
-terraform apply -var-file=./terraform_vars.json -auto-approve
+terraform apply -auto-approve

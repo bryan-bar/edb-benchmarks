@@ -6,10 +6,9 @@ RUNDIR=$(dirname "$RUNDIR")
 # We need the absolute path of $TERRAFORM_PROJECT_PATH in this script.
 TERRAFORM_PROJECT_PATH=$(readlink -f "${TERRAFORM_PROJECT_PATH}")
 
-edb-terraform "${TERRAFORM_PROJECT_PATH}" ../infrastructure.yml
+edb-terraform "${TERRAFORM_PROJECT_PATH}" ../infrastructure.yml --validate
 cd "${TERRAFORM_PROJECT_PATH}"
-terraform init
-terraform apply -var-file=./terraform_vars.json -auto-approve
+terraform apply -auto-approve
 
 BIGANIMALINFRAFILE="${TERRAFORM_PROJECT_PATH}/ba-infrastructure.yml"
 
