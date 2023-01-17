@@ -33,7 +33,7 @@
       ansible.builtin.command:
         cmd: >-
           dig
-          {% if infra.servers.databases.dbt2.public_ip != "null" %}
+          {% if infra.servers.databases.dbt2.public_ip %}
             {{ infra.servers.databases.dbt2.public_ip }}
           {% else %}
             {{ infra.servers.databases.dbt2.private_ip }}
