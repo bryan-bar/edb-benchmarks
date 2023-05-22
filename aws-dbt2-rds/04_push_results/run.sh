@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 # Push DBT2 files to the S3 bucket
-BUCKET_NAME="ebac-reports"
 
 # Extract the archive containing the report and data
 tar xzf ../execute/dbt2_data/dbt2-data.tar.gz -C .

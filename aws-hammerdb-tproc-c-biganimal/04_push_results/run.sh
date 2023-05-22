@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 # Push HammerDB files to the S3 bucket
-BUCKET_NAME="ebac-reports"
 
 # Extract the archive containing the report and data
 mkdir -p tprocc-data

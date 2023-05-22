@@ -3,7 +3,6 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Push pgbench files to the S3 bucket
-BUCKET_NAME="ebac-reports"
 
 # Copy collected data and generated data & charts
 cp -r ${SCRIPT_DIR}/../execute/benchmark_data ${SCRIPT_DIR}/report-data

@@ -1,7 +1,5 @@
 #!/bin/bash -eux
 
-SSH_USER=rocky
-
 export ANSIBLE_PIPELINING=true
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false

@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 # Push pgbench files to the S3 bucket
-BUCKET_NAME="ebac-reports"
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 

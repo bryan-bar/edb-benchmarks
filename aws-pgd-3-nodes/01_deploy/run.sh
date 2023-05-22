@@ -2,8 +2,6 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-SSH_USER=rocky
-
 export ANSIBLE_PIPELINING=true
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false
@@ -15,8 +13,6 @@ python3 ${SCRIPT_DIR}/build-inventory.py ${TERRAFORM_PROJECT_PATH}
 mv ${SCRIPT_DIR}/inventory.yml ${SCRIPT_DIR}/../.
 
 # TPA configuration
-TPA_BIN_DIR=/opt/EDB/TPA/bin
-
 TPA_DIR=${SCRIPT_DIR}/tpa
 mv ${SCRIPT_DIR}/config.yml ${TPA_DIR}/.
 mv ${SCRIPT_DIR}/edb-repo-creds.txt ${TPA_DIR}/.
