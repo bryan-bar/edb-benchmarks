@@ -1,0 +1,7 @@
+*tfstate*
+*terraform*
+servers.yml
+*env_*
+*.log
+*.swp
+*cache*
