@@ -1,13 +1,19 @@
 #!/bin/bash
 
 # Workflow script to run a benchmark based on a directory path
-# Examples availble below in usage() 
+# Assumptions: 
+#   * Each benchmark directory has directories with a numberic prefix ordering
+#     * Within each directory is a run.sh script to kick off that step
+#     * ex: aws-dbt2-aurora/00_validate/run.sh
+#   * Each benchmark directory has an environment file to source required variables to run the benchmark
+#     * ex: aws-dbt2-aurora/environment
+# Examples availble below in usage()
 
 usage () {
     cat << EOF
 Usage: $0 -b benchmark_directory [-e environment_file] [-s starting_step ] [-x comma_separated_steps] [-u < true | false > ]
     -b  (required) Path to benchmark directory
-    -e  Path to environment file
+    -e  Path to environment file, will be copied with user passed values if any values are unset for future re-use
     -s  Benchmark step to start at
     -x  Benchmark steps to skip over
     -u  Skip user input for missing values

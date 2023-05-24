@@ -33,17 +33,24 @@ Execution of a benchmark is accomplished by following the steps below
 
 ### Benchmark folder structure:
 
-Each benchmark should follow the directory structure listed below:
+Each benchmark should follow the directory structure listed below with a numberic prefix and a step name:
 
-- `validate` - Validates the parameters selected for the benchmark execution. **If the validation fails the entire benchmark fails.**
-- `provision` - Provisions the infrastructure required for executing the benchmark
-- `deploy` - Sets up and configures the provisioned infrastructure
-- `prepare` - Prepares and sets up the benchmark execution
-- `execute` - Executes the benchmark
-- `push_results` - Upload the results from the benchmark into AWS S3 Bucket
-- `unprovision` - Destroys the previously provisioned infrastructure
+- `00_validate` - Validates the parameters selected for the benchmark execution. **If the validation fails the entire benchmark fails.**
+- `01_provision` - Provisions the infrastructure required for executing the benchmark
+- `02_deploy` - Sets up and configures the provisioned infrastructure
+- `03_prepare` - Prepares and sets up the benchmark execution
+- `04_execute` - Executes the benchmark
+- `05_push_results` - Upload the results from the benchmark into AWS S3 Bucket
+- `06_unprovision` - Destroys the previously provisioned infrastructure
 
 **Each directory contains a `run.sh` script file that executes the ansible playbooks required for the benchmark**
+
+** For development, you can use the run_benchmark.sh script to assist in running and debugging each step.
+```shell
+chmod +x run_benchmark.sh
+./run_benchmark.sh -h
+./run_benchmark.sh -b aws-dbt2-aurora
+```
 
 ### Contributing:
 
