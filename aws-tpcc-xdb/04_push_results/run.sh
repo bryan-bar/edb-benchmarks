@@ -4,7 +4,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Copy infrastructure.yml and vars.yml
-cp -r ${SCRIPT_DIR}/../execute/benchmark_data ${SCRIPT_DIR}/report-data
+cp -r ${SCRIPT_DIR}/../03_execute/benchmark_data ${SCRIPT_DIR}/report-data
 
 date=$(date +'%Y-%m-%dT%H:%M:%S')
 

@@ -2,7 +2,7 @@
 # Push DBT2 files to the S3 bucket
 
 # Extract the archive containing the report and data
-tar xzf ../execute/dbt2_data/dbt2-data.tar.gz -C .
+tar xzf ../04_execute/dbt2_data/dbt2-data.tar.gz -C .
 mv ./tmp/dbt2-data .
 rm -rf ./tmp
 # Copy infrastructure.yml and vars.yml

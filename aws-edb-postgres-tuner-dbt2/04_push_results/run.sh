@@ -4,9 +4,9 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Extract the archive containing the report and data
-tar xzf "${SCRIPT_DIR}/../execute/tuner-off/tuner-off.tar.gz" -C "${SCRIPT_DIR}"
-tar xzf "${SCRIPT_DIR}/../execute/tuner-measurement/tuner-measurement.tar.gz" -C "${SCRIPT_DIR}"
-tar xzf "${SCRIPT_DIR}/../execute/tuner-final/tuner-final.tar.gz" -C "${SCRIPT_DIR}"
+tar xzf "${SCRIPT_DIR}/../03_execute/tuner-off/tuner-off.tar.gz" -C "${SCRIPT_DIR}"
+tar xzf "${SCRIPT_DIR}/../03_execute/tuner-measurement/tuner-measurement.tar.gz" -C "${SCRIPT_DIR}"
+tar xzf "${SCRIPT_DIR}/../03_execute/tuner-final/tuner-final.tar.gz" -C "${SCRIPT_DIR}"
 mkdir dbt2-data
 mv "${SCRIPT_DIR}/tmp/tuner-off" "${SCRIPT_DIR}/dbt2-data/"
 mv "${SCRIPT_DIR}/tmp/tuner-measurement" "${SCRIPT_DIR}/dbt2-data/"

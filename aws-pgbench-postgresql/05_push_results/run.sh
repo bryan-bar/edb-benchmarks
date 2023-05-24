@@ -5,7 +5,7 @@ BUCKET_NAME="ebac-reports"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Copy infrastructure.yml and vars.yml
-cp -r ${SCRIPT_DIR}/../execute/pgbench_data ${SCRIPT_DIR}/report-data
+cp -r ${SCRIPT_DIR}/../04_execute/pgbench_data ${SCRIPT_DIR}/report-data
 cp ${SCRIPT_DIR}/../infrastructure.yml ${SCRIPT_DIR}/report-data/.
 cp ${SCRIPT_DIR}/../vars.yml ${SCRIPT_DIR}/report-data/.
 
