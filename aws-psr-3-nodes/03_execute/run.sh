@@ -12,11 +12,11 @@ ansible-playbook \
 	--private-key ${TERRAFORM_PROJECT_PATH}/ssh-id_rsa \
 	-i ${SCRIPT_DIR}/../inventory.yml \
 	-e "@${SCRIPT_DIR}/../vars.yml" \
-	-e "tpcc_warehouse=${TPCC_WAREHOUSE}" \
-	-e "tpcc_duration=${TPCC_DURATION}" \
-	-e "tpcc_rampup=${TPCC_RAMPUP}" \
-	-e "tpcc_min_vusers=${TPCC_MIN_VUSERS}" \
-	-e "tpcc_max_vusers=${TPCC_MAX_VUSERS}" \
-	-e "tpcc_step_vusers=${TPCC_STEP_VUSERS}" \
+	-e "TPCC_WAREHOUSE=${TPCC_WAREHOUSE}" \
+	-e "TPCC_DURATION=${TPCC_DURATION}" \
+	-e "TPCC_RAMPUP=${TPCC_RAMPUP}" \
+	-e "TPCC_MIN_VUSERS=${TPCC_MIN_VUSERS}" \
+	-e "TPCC_MAX_VUSERS=${TPCC_MAX_VUSERS}" \
+	-e "TPCC_STEP_VUSERS=${TPCC_STEP_VUSERS}" \
 	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
 	${SCRIPT_DIR}/playbook-tpcc-run-rampup.yml

@@ -23,12 +23,12 @@
       environment:
         PG_HOST: "{{ hostvars['bdr1'].private_ip }}"
         HAMMERDB_BIN_PATH: "{{ hammerdb_data_path }}"
-        TPCC_WAREHOUSE: "{{ tpcc_warehouse }}"
-        TPCC_RAMPUP: "{{ tpcc_rampup }}"
-        TPCC_DURATION: "{{ tpcc_duration }}"
-        TPCC_MIN_VUSERS: "{{ tpcc_min_vusers }}"
-        TPCC_MAX_VUSERS: "{{ tpcc_max_vusers }}"
-        TPCC_STEP_VUSERS: "{{ tpcc_step_vusers }}"
+        TPCC_WAREHOUSE: "{{ TPCC_WAREHOUSE }}"
+        TPCC_RAMPUP: "{{ TPCC_RAMPUP }}"
+        TPCC_DURATION: "{{ TPCC_DURATION }}"
+        TPCC_MIN_VUSERS: "{{ TPCC_MIN_VUSERS }}"
+        TPCC_MAX_VUSERS: "{{ TPCC_MAX_VUSERS }}"
+        TPCC_STEP_VUSERS: "{{ TPCC_STEP_VUSERS }}"
         PG_DBNAME: "{{ bdr_dbname }}"
       async: 180000
       poll: 60

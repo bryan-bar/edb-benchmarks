@@ -1,50 +1,50 @@
 #!/bin/bash -eux
 
-if (( $(echo "$tpcc_warehouse < 2000" | bc -l) )); then
-   echo "tpcc_warehouse: $tpcc_warehouse";
+if (( $(echo "$TPCC_WAREHOUSE < 2000" | bc -l) )); then
+   echo "TPCC_WAREHOUSE: $TPCC_WAREHOUSE";
    echo "HammerDB Warehouses, cannot be lower than 2000!"
    exit 1
 fi
 
-if (( $(echo "$tpcc_duration < 5" | bc -l) )); then
-   echo "tpcc_duration: $tpcc_duration";
+if (( $(echo "$TPCC_DURATION < 5" | bc -l) )); then
+   echo "TPCC_DURATION: $TPCC_DURATION";
    echo "HammerDB run duration, cannot be lower than 5!"
    exit 1
 fi
 
-if (( $(echo "$tpcc_rampup < 10" | bc -l) )); then
-   echo "tpcc_rampup: $tpcc_rampup";
+if (( $(echo "$TPCC_RAMPUP < 10" | bc -l) )); then
+   echo "TPCC_RAMPUP: $TPCC_RAMPUP";
    echo "HammerDB RampUp, cannot be lower than 10!"
    exit 1
 fi
 
-if (( $(echo "$tpcc_loader_vusers < 75" | bc -l) )); then
-   echo "tpcc_loader_vusers: $tpcc_loader_vusers";
+if (( $(echo "$TPCC_LOADER_VUSERS < 75" | bc -l) )); then
+   echo "TPCC_LOADER_VUSERS: $TPCC_LOADER_VUSERS";
    echo "HammerDB Number of virtual users, cannot be lower than 75!"
    exit 1
 fi
 
-if (( $(echo "$tpcc_min_vusers < 1" | bc -l) )); then
-   echo "tpcc_min_vusers: $tpcc_min_vusers";
+if (( $(echo "$TPCC_MIN_VUSERS < 1" | bc -l) )); then
+   echo "TPCC_MIN_VUSERS: $TPCC_MIN_VUSERS";
    echo "HammerDB Number of Minimum virtual users, cannot be lower than 1!"
    exit 1
 fi
 
-if (( $(echo "$tpcc_max_vusers < 14" | bc -l) )); then
-   echo "tpcc_max_vusers: $tpcc_max_vusers";
+if (( $(echo "$TPCC_MAX_VUSERS < 14" | bc -l) )); then
+   echo "TPCC_MAX_VUSERS: $TPCC_MAX_VUSERS";
    echo "HammerDB Number of Maximum virtual users, cannot be lower than 14!"
    exit 1
 fi
 
 
-if (( $(echo "$tpcc_step_vusers < 1" | bc -l) )); then
-   echo "tpcc_step_vusers: $tpcc_step_vusers";
+if (( $(echo "$TPCC_STEP_VUSERS < 1" | bc -l) )); then
+   echo "TPCC_STEP_VUSERS: $TPCC_STEP_VUSERS";
    echo "HammerDB Increased Virtual Users, cannot be lower than 1!"
    exit 1
 fi
 
-if [ -z "${tpa_2q_subscription_token}" ]; then
-   echo "tpa_2q_subscription_token: $tpa_2q_subscription_token";
+if [ -z "${TPA_2Q_SUBSCRIPTION_TOKEN}" ]; then
+   echo "TPA_2Q_SUBSCRIPTION_TOKEN: $TPA_2Q_SUBSCRIPTION_TOKEN";
    echo "TPA Exec Subscription Token, cannot be empty!"
    exit 1
 fi
