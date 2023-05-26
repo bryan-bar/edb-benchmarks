@@ -46,8 +46,8 @@ Each benchmark should follow the directory structure listed below with a numberi
 **Each directory contains a `run.sh` script file that executes the ansible playbooks required for the benchmark**
 
 ** For development, you can use the run_benchmark.sh script to assist in running and debugging each step.
+** Stored in repo with execuation bit on.
 ```shell
-chmod +x run_benchmark.sh
 ./run_benchmark.sh -h
 ./run_benchmark.sh -b aws-dbt2-aurora
 ```
