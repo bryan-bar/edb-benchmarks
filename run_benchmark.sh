@@ -11,7 +11,7 @@
 
 usage () {
     cat << EOF
-Usage: $0 -b benchmark_directory [-e environment_file] [-s starting_step ] [-x comma_separated_steps] [-u < true | false > ]
+Usage: $(basename "$0") -b benchmark_directory [-e environment_file] [-s starting_step ] [-x comma_separated_steps] [-u < true | false > ]
     -b  (required) Path to benchmark directory
     -e  Path to environment file, will be copied with user passed values if any values are unset for future re-use
     -s  Benchmark step to start at
@@ -49,12 +49,12 @@ parse_args() {
                 user_input="${OPTARG}";;
             *)
                 usage;
-                exit 0;;
+                exit 1;;
         esac
     done
     if (( $OPTIND == 1 )); then
         usage
-        exit 0
+        exit 1
     fi
     if [[ ! -d "$benchmark_directory" ]]; then
         echo "Use -b to specify the path to the benchmarks directory" >&2
@@ -215,4 +215,4 @@ parse_args $@
 source_env_files
 set_file_permissions
 run_steps
-echo "Benchmark has finished: $0 $@"
+echo 'Benchmark has finished: $(basename "$0") $@'
