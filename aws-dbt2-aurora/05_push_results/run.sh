@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 # Push DBT2 files to the S3 bucket
-cd $RESULTS_DIR/dbt2-data
+cd $RESULTS_DIRECTORY/dbt2-data
 date=$(date +'%Y-%m-%dT%H:%M:%S')
 
 aws s3 cp readme.txt s3://${BUCKET_NAME}/${BENCHMARK_NAME}/${date}/
