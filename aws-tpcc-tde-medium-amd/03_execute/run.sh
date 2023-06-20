@@ -62,3 +62,11 @@ ansible-playbook \
 # worry about whether all the files exists for the push_results steps, meaning
 # we don't have to hack that for the time being.
 python3 "${SCRIPT_DIR}/post-processing.py" || echo "ignoring errors"
+
+# Move data to results directory
+[[ ! -d "$RESULTS_DIRECTORY/report-data" ]] && mkdir -p "$RESULTS_DIRECTORY/report-data"
+# Copy collected data and generated data & charts
+cp -r ${SCRIPT_DIR}/benchmark_data ${RESULTS_DIRECTORY}/report-data
+# Copy infrastructure.yml and vars.yml
+cp "../infrastructure.yml" "$RESULTS_DIRECTORY"
+cp "../vars.yml" "$RESULTS_DIRECTORY"
