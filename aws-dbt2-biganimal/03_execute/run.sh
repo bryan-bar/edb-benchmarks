@@ -15,3 +15,14 @@ ansible-playbook \
 	-e "dbt2_connections=${DBT2_CONNECTIONS}" \
 	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
 	./playbook-dbt2-run.yml
+
+# Move data to results directory
+[[ ! -d "$RESULTS_DIRECTORY" ]] && mkdir "$RESULTS_DIRECTORY"
+mv ./dbt2_data "$RESULTS_DIRECTORY"
+# Extract the archive containing the report and data
+tar xzf "$RESULTS_DIRECTORY/dbt2_data/dbt2-data.tar.gz" -C .
+mv ./tmp/dbt2-data/* "$RESULTS_DIRECTORY/dbt2_data"
+rm -rf ./tmp
+# Copy infrastructure.yml and vars.yml
+cp ../infrastructure.yml "$RESULTS_DIRECTORY/dbt2_data"
+cp ../vars.yml "$RESULTS_DIRECTORY/dbt2_data"
