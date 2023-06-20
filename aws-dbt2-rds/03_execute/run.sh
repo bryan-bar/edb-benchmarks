@@ -17,12 +17,12 @@ ansible-playbook \
 	./playbook-dbt2-run.yml
 
 # Move data to results directory
-[[ ! -d "$RESULTS_DIRECTORY" ]] && mkdir "$RESULTS_DIRECTORY"
-mv ./dbt2_data "$RESULTS_DIRECTORY"
+[[ ! -d "$RESULTS_DIRECTORY/dbt2-data" ]] && mkdir -p "$RESULTS_DIRECTORY/dbt2-data"
+mv ./dbt2_data/* "$RESULTS_DIRECTORY/dbt2-data"
 # Extract the archive containing the report and data
-tar xzf "$RESULTS_DIRECTORY/dbt2_data/dbt2-data.tar.gz" -C .
-mv ./tmp/dbt2-data/* "$RESULTS_DIRECTORY/dbt2_data"
+tar xzf "$RESULTS_DIRECTORY/dbt2-data/dbt2-data.tar.gz" -C .
+mv ./tmp/dbt2-data/* "$RESULTS_DIRECTORY/dbt2-data"
 rm -rf ./tmp
 # Copy infrastructure.yml and vars.yml
-cp ../infrastructure.yml "$RESULTS_DIRECTORY/dbt2_data"
-cp ../vars.yml "$RESULTS_DIRECTORY/dbt2_data"
+cp ../infrastructure.yml "$RESULTS_DIRECTORY/dbt2-data"
+cp ../vars.yml "$RESULTS_DIRECTORY/dbt2-data"
