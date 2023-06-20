@@ -1,14 +1,6 @@
 #!/bin/bash -eux
 # Push DBT2 files to the S3 bucket
-
-# Extract the archive containing the report and data
-tar xzf ../04_execute/dbt2_data/dbt2-data.tar.gz -C .
-mv ./tmp/dbt2-data .
-rm -rf ./tmp
-# Copy infrastructure.yml and vars.yml
-cp ../infrastructure.yml dbt2-data/.
-cp ../vars.yml dbt2-data/.
-cd dbt2-data
+cd $RESULTS_DIR/dbt2-data
 date=$(date +'%Y-%m-%dT%H:%M:%S')
 
 aws s3 cp readme.txt s3://${BUCKET_NAME}/${BENCHMARK_NAME}/${date}/
