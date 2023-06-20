@@ -14,3 +14,11 @@ ansible-playbook \
 	-e "@../vars.yml" \
 	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
 	./playbook-tprocc-run.yml
+
+# Move data to results directory
+[[ ! -d "$RESULTS_DIRECTORY/tprocc-data" ]] && mkdir -p "$RESULTS_DIRECTORY/tprocc-data"
+# Copy hammerdb log file
+cp -pr "./hammerdb.log" "$RESULTS_DIRECTORY/tprocc-data"
+# Copy infrastructure.yml and vars.yml
+cp "../infrastructure.yml" "$RESULTS_DIRECTORY/tprocc-data"
+cp "../vars.yml" "$RESULTS_DIRECTORY/tprocc-data"
