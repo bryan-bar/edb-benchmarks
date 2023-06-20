@@ -28,3 +28,11 @@ done
 
 # Generate final data points and chart
 python3 ${SCRIPT_DIR}/post-processing.py
+
+# Move data to results directory
+[[ ! -d "$RESULTS_DIRECTORY/report-data" ]] && mkdir -p "$RESULTS_DIRECTORY/report-data"
+# Copy collected data and generated data & charts
+cp -r ${SCRIPT_DIR}/pgbench_data ${RESULTS_DIRECTORY}/report-data
+# Copy infrastructure.yml and vars.yml
+cp "../infrastructure.yml" "$RESULTS_DIRECTORY/report-data"
+cp "../vars.yml" "$RESULTS_DIRECTORY/report-data"
