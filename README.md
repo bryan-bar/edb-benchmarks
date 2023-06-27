@@ -18,7 +18,7 @@ The following components are installed on the workers:
 
 Components needed by host:
 - `terraform >= 1.3.6`
-- `edb-terraform >= 1.0.0`
+- `edb-terraform >= 1.5.0`
 - `AWSCli`
 - `ansible-core`
 - `tpaexec`
