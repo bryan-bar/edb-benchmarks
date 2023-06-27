@@ -6,6 +6,8 @@ export ANSIBLE_PIPELINING=true
 export ANSIBLE_SSH_ARGS="-o ForwardX11=no -o UserKnownHostsFile=/dev/null"
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false
+TERRAFORM_PROJECT_PATH="${RESULTS_DIRECTORY}/${TERRAFORM_PROJECT_NAME}"
+
 
 python3 "${SCRIPT_DIR}/build-inventory.py" "${TERRAFORM_PROJECT_PATH}"
 mv "${SCRIPT_DIR}/inventory.yml" "${SCRIPT_DIR}/../."
