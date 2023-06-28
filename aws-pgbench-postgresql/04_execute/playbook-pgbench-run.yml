@@ -104,8 +104,8 @@
         dest: "./pgbench_data/pgbench-tps-{{ pg_version }}.csv"
         flat: true
 
-- hosts: primary
-  name: post-processing
+- hosts: localhost
+  name: post-processing on localhost
   gather_facts: false
   become: true
   tasks:

@@ -182,8 +182,8 @@
       - "{{ _time_pg_upgrade_output_filename }}"
       - "/tmp/tpcc-tables-size.output"
 
-- hosts: primary
-  name: post-processing
+- hosts: localhost
+  name: post-processing on localhost
   gather_facts: false
   become: true
   tasks:

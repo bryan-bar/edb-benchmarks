@@ -44,8 +44,8 @@
       loop:
       - "pgd_nopm_catchup_time.csv"
 
-- hosts: primary
-  name: post-processing
+- hosts: localhost
+  name: post-processing on localhost
   gather_facts: false
   become: true
   tasks:

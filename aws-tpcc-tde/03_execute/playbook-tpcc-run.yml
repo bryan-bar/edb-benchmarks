@@ -258,8 +258,8 @@
       become_user: "{{ pg_owner }}"
       when: "'primary' in group_names"
 
-- hosts: primary
-  name: post-processing
+- hosts: localhost
+  name: post-processing on localhost
   gather_facts: false
   become: true
   tasks:
