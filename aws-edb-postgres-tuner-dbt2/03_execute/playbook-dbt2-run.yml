@@ -84,7 +84,7 @@
         state: absent
       become: true
       loop:
-        - "{{ results_directory }}/{{ dbt2resultsname }}"
+        - /tmp/dbt2-data/{{ dbt2resultsname }}
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -135,7 +135,7 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i /tmp/dbt2-data/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
       changed_when: false
@@ -199,7 +199,7 @@
         state: absent
       become: true
       loop:
-        - "{{ results_directory }}/{{ dbt2resultsname }}"
+        - /tmp/dbt2-data/{{ dbt2resultsname }}
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -221,7 +221,7 @@
             -F {{ fpp }}
             -H {{ infra.servers.machines["dbt2-database"].private_ip }}
             -n
-            -o {{ results_directory }}/{{ dbt2resultsname }}
+            -o /tmp/dbt2-data/{{ dbt2resultsname }}
             -s {{ (900000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -250,7 +250,7 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i /tmp/dbt2-data/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
       async: 180000
@@ -310,7 +310,8 @@
         state: absent
       become: true
       loop:
-        - "{{ results_directory }}/{{ dbt2resultsname }}"
+        - /tmp/dbt2-data/{{ dbt2resultsname }}
+        - /tmp/dbt2-data.tar.gz
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -332,7 +333,7 @@
             -F {{ fpp }}
             -H {{ infra.servers.machines["dbt2-database"].private_ip }}
             -n
-            -o {{ results_directory }}/{{ dbt2resultsname }}
+            -o /tmp/dbt2-data/{{ dbt2resultsname }}
             -s {{ (900000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -361,7 +362,7 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i /tmp/dbt2-data/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
       async: 180000
@@ -372,3 +373,20 @@
     - name: Report generation output
       ansible.builtin.debug:
         var: result
+
+    - name: Create data archive on remote
+      ansible.builtin.command:
+        cmd: tar cvzf /tmp/dbt2-data.tar.gz -C /tmp/dbt2-data/ .
+
+    - name: Fetch DBT2 data files to localhost
+      ansible.builtin.fetch:
+        src: "/tmp/dbt2-data.tar.gz"
+        dest: "{{ results_directory }}/"
+        flat: true
+
+    - name: Extract data contents to localhost results directory
+      ansible.builtin.shell:
+        cmd: |
+          tar xzf "{{ results_directory }}/dbt2-data.tar.gz" -C "{{ results_directory }}"
+      delegate_to: localhost
+
