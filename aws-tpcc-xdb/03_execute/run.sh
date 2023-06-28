@@ -20,16 +20,9 @@ ansible-playbook \
 	-e "TPCC_MAX_VUSERS=${TPCC_MAX_VUSERS}" \
 	-e "TPCC_STEP_VUSERS=${TPCC_STEP_VUSERS}" \
 	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
+	-e "results_directory=${RESULTS_DIRECTORY}/report-data" \
 	${SCRIPT_DIR}/playbook-tpcc-run-rampup.yml
 
-
-# Generate charts
-python3 ${SCRIPT_DIR}/post-processing.py
-
-# Move data to results directory
-[[ ! -d "$RESULTS_DIRECTORY/report-data" ]] && mkdir -p "$RESULTS_DIRECTORY/report-data"
-# Copy collected data and generated data & charts
-cp -r ${SCRIPT_DIR}/benchmark_data ${RESULTS_DIRECTORY}/report-data
 # Copy infrastructure.yml and vars.yml
 cp "../infrastructure.yml" "$RESULTS_DIRECTORY"
 cp "../vars.yml" "$RESULTS_DIRECTORY"
