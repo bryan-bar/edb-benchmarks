@@ -36,14 +36,13 @@
             +short
       register: address
 
-    - name: Make sure DBT2 target data dir and archive do not exist
+    - name: Make sure DBT2 target data dir does not exist
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       become: true
       loop:
-        - /tmp/dbt2-data
-        - /tmp/dbt2-data.tar.gz
+        - "{{ results_directory }}"
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -65,7 +64,7 @@
             -F {{ fpp }}
             -H {{ address.stdout_lines[-1] }}
             -n
-            -o /tmp/dbt2-data
+            -o {{ results_directory }}
             -s {{ (2700000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -91,7 +90,7 @@
     - name: Generate DBT2 report
       ansible.builtin.command:
         cmd: >-
-          dbt2-generate-report -i /tmp/dbt2-data
+          dbt2-generate-report -i {{ results_directory }}
       become: true
       become_user: "{{ pg_owner }}"
       async: 180000
@@ -102,14 +101,3 @@
     - name: Report generation output
       ansible.builtin.debug:
         var: result
-
-
-    - name: Create data archive
-      ansible.builtin.command:
-        cmd: tar cvzf /tmp/dbt2-data.tar.gz /tmp/dbt2-data
-
-    - name: Fetch DBT2 data files
-      ansible.builtin.fetch:
-        src: "/tmp/dbt2-data.tar.gz"
-        dest: "./dbt2_data/dbt2-data.tar.gz"
-        flat: true
