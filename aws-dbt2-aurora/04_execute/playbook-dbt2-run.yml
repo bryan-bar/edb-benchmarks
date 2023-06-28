@@ -71,7 +71,7 @@
             -F {{ fpp }}
             -H {{ address.stdout_lines[-1] }}
             -n
-            -o /tmp/dbt2-data
+            -o {{ results_directory }}
             -s {{ (2700000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -97,25 +97,12 @@
     - name: Generate DBT2 report
       ansible.builtin.command:
         cmd: >-
-          dbt2-generate-report -i /tmp/dbt2-data
+          dbt2-generate-report -i {{ results_directory }}
       become: true
       become_user: "{{ pg_owner }}"
-      # 04/21/2023 - Commented because was causing the benchmark to fail      
-      #async: 180000
-      #poll: 60
       changed_when: false
       register: result
 
     - name: Report generation output
       ansible.builtin.debug:
         var: result
-
-    - name: Create data archive
-      ansible.builtin.command:
-        cmd: tar cvzf /tmp/dbt2-data.tar.gz /tmp/dbt2-data
-
-    - name: Fetch DBT2 data files
-      ansible.builtin.fetch:
-        src: "/tmp/dbt2-data.tar.gz"
-        dest: "./dbt2_data/dbt2-data.tar.gz"
-        flat: true
