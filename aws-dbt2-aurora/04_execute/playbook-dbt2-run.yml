@@ -71,7 +71,7 @@
             -F {{ fpp }}
             -H {{ address.stdout_lines[-1] }}
             -n
-            -o {{ results_directory }}
+            -o /tmp/dbt2-data
             -s {{ (2700000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -97,7 +97,7 @@
     - name: Generate DBT2 report
       ansible.builtin.command:
         cmd: >-
-          dbt2-generate-report -i {{ results_directory }}
+          dbt2-generate-report -i /tmp/dbt2-data
       become: true
       become_user: "{{ pg_owner }}"
       changed_when: false
@@ -106,3 +106,19 @@
     - name: Report generation output
       ansible.builtin.debug:
         var: result
+
+    - name: Create data archive on remote
+      ansible.builtin.command:
+        cmd: tar cvzf /tmp/dbt2-data.tar.gz -C /tmp/dbt2-data/ .
+
+    - name: Fetch DBT2 data files to localhost
+      ansible.builtin.fetch:
+        src: "/tmp/dbt2-data.tar.gz"
+        dest: "{{ results_directory }}/"
+        flat: true
+
+    - name: Extract data contents to localhost results directory
+      ansible.builtin.shell:
+        cmd: |
+          tar xzf "{{ results_directory }}/dbt2-data.tar.gz" -C "{{ results_directory }}"
+      delegate_to: localhost
