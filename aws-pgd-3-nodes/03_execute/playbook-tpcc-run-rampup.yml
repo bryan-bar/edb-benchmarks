@@ -36,7 +36,7 @@
     - name: Fetch data files
       ansible.builtin.fetch:
         src: "{{ hammerdb_data_path }}/{{ item }}"
-        dest: "./benchmark_data/{{ item }}"
+        dest: "{{ results_directory }}/{{ item }}"
         flat: true
       loop:
       - "pgd_nopm_catchup_time.csv"
