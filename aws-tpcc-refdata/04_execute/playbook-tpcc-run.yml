@@ -218,13 +218,13 @@
 - hosts: localhost
   name: post-processing on localhost
   gather_facts: false
-  become: true
+  become: false
   tasks:
     - name: Generate final data points and chart
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: |
           # Some distros use python for python3 since python2 is EOL
-          if command -v python3
+          if command -v python3 > /dev/null
           then
             PLAYBOOK_PYTHON="python3"
           else
@@ -232,7 +232,12 @@
           fi
           $PLAYBOOK_PYTHON {{ playbook_dir }}/post-processing.py
 
-    - name: Move data to results directory
+    - name: Copy data to results directory
       ansible.builtin.copy:
         src: "./benchmark_data/"
         dest: "{{ results_directory }}/"
+
+    - name: Discard temporary data directory
+      ansible.builtin.file:
+        path: "./benchmark_data/"
+        state: absent
