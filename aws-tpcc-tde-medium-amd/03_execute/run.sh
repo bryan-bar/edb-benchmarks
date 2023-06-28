@@ -29,7 +29,7 @@ ansible-playbook \
 	-e "use_tde=0" \
 	${SCRIPT_DIR}/playbook-tpcc-run-rampup.yml
 
-# Run the benchmark for the encrypted instance
+# Run the benchmark for the encrypted and unencrypted instance
 ansible-playbook \
 	-u ${SSH_USER} \
 	--private-key ${TERRAFORM_PROJECT_PATH}/ssh-id_rsa \
@@ -40,34 +40,9 @@ ansible-playbook \
 	-e "tpcc_warehouse=${TPCC_WAREHOUSE}" \
 	-e "tpcc_vusers=${TPCC_VUSERS}" \
 	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
-	-e "use_tde=1" \
+	-e "results_directory=${RESULTS_DIRECTORY}/report-data" \
 	${SCRIPT_DIR}/playbook-tpcc-run.yml
 
-# Run the benchmark for the unencrypted instance
-ansible-playbook \
-	-u ${SSH_USER} \
-	--private-key ${TERRAFORM_PROJECT_PATH}/ssh-id_rsa \
-	-i ${SCRIPT_DIR}/../inventory.yml \
-	-e "@${SCRIPT_DIR}/../vars.yml" \
-	-e "tpcc_duration=${TPCC_DURATION}" \
-	-e "tpcc_rampup=${TPCC_RAMPUP}" \
-	-e "tpcc_warehouse=${TPCC_WAREHOUSE}" \
-	-e "tpcc_vusers=${TPCC_VUSERS}" \
-	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
-	-e "use_tde=0" \
-	${SCRIPT_DIR}/playbook-tpcc-run.yml
-
-# Generate charts
-# FIXME: Dirty hack in the interest of time.  Let the post-processing.py script
-# process what it can and fix the broken parts later.  This also let's us not
-# worry about whether all the files exists for the push_results steps, meaning
-# we don't have to hack that for the time being.
-python3 "${SCRIPT_DIR}/post-processing.py" || echo "ignoring errors"
-
-# Move data to results directory
-[[ ! -d "$RESULTS_DIRECTORY/report-data" ]] && mkdir -p "$RESULTS_DIRECTORY/report-data"
-# Copy collected data and generated data & charts
-cp -r ${SCRIPT_DIR}/benchmark_data ${RESULTS_DIRECTORY}/report-data
 # Copy infrastructure.yml and vars.yml
 cp "../infrastructure.yml" "$RESULTS_DIRECTORY"
 cp "../vars.yml" "$RESULTS_DIRECTORY"
