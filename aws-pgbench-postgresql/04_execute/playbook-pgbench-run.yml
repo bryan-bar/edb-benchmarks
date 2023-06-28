@@ -110,7 +110,16 @@
   become: true
   tasks:
     - name: Generate final data points and chart
-      ansible.builtin.shell: python3 {{ playbook_dir }}/post-processing.py
+      ansible.builtin.command:
+        cmd: |
+          # Some distros use python for python3 since python2 is EOL
+          if command -v python3
+          then
+            PLAYBOOK_PYTHON="python3"
+          else
+            PLAYBOOK_PYTHON="python"
+          fi
+          $PLAYBOOK_PYTHON {{ playbook_dir }}/post-processing.py
 
     - name: Move data to results directory
       ansible.builtin.copy:
