@@ -56,19 +56,6 @@
         state: restarted
       become: true
 
-    - name: Set DBT-2 results directory
-      ansible.builtin.set_fact:
-        dbt2resultsname: "tuner-off"
-
-    - name: Make sure DBT-2 target data dir and archive do not exist
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      become: true
-      loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
-
 - hosts: dbt2_driver
   name: Run DBT-2 with PostgreSQL defaults
   gather_facts: true
@@ -97,8 +84,7 @@
         state: absent
       become: true
       loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
+        - "{{ results_directory }}/{{ dbt2resultsname }}"
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -120,7 +106,7 @@
             -F {{ fpp }}
             -H {{ infra.servers.machines["dbt2-database"].private_ip }}
             -n
-            -o /tmp/{{ dbt2resultsname }}
+            -o {{ results_directory }}/{{ dbt2resultsname }}
             -s {{ (900000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -149,28 +135,15 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i /tmp/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
-      async: 180000
-      poll: 60
       changed_when: false
       register: result
 
     - name: Report generation output
       ansible.builtin.debug:
         var: result
-
-    - name: Create data archive
-      ansible.builtin.command:
-        cmd: >-
-          tar cvzf /tmp/{{ dbt2resultsname }}.tar.gz /tmp/{{ dbt2resultsname }}
-
-    - name: Fetch DBT-2 data files
-      ansible.builtin.fetch:
-        src: "/tmp/{{ dbt2resultsname }}.tar.gz"
-        dest: "./{{ dbt2resultsname }}/{{ dbt2resultsname }}.tar.gz"
-        flat: true
 
 - hosts: dbt2_database
   name: Enable EDB Postgres Tuner for measurement run
@@ -197,19 +170,6 @@
         daemon_reload: true
         state: restarted
       become: true
-
-    - name: Set DBT-2 results directory
-      ansible.builtin.set_fact:
-        dbt2resultsname: "tuner-measurement"
-
-    - name: Make sure DBT-2 target data dir and archive do not exist
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      become: true
-      loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
 
 - hosts: dbt2_driver
   name: Run DBT-2 with EDB Postgres Tuner enabled
@@ -239,8 +199,7 @@
         state: absent
       become: true
       loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
+        - "{{ results_directory }}/{{ dbt2resultsname }}"
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -262,7 +221,7 @@
             -F {{ fpp }}
             -H {{ infra.servers.machines["dbt2-database"].private_ip }}
             -n
-            -o /tmp/{{ dbt2resultsname }}
+            -o {{ results_directory }}/{{ dbt2resultsname }}
             -s {{ (900000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -291,7 +250,7 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i /tmp/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
       async: 180000
@@ -302,17 +261,6 @@
     - name: Report generation output
       ansible.builtin.debug:
         var: result
-
-    - name: Create data archive
-      ansible.builtin.command:
-        cmd: >-
-          tar cvzf /tmp/{{ dbt2resultsname }}.tar.gz /tmp/{{ dbt2resultsname }}
-
-    - name: Fetch DBT-2 data files
-      ansible.builtin.fetch:
-        src: "/tmp/{{ dbt2resultsname }}.tar.gz"
-        dest: "./{{ dbt2resultsname }}/{{ dbt2resultsname }}.tar.gz"
-        flat: true
 
 - hosts: dbt2_database
   name: Applying any further EDB Postgres Tuner requiring restart
@@ -333,19 +281,6 @@
         daemon_reload: true
         state: restarted
       become: true
-
-    - name: Set DBT-2 results directory
-      ansible.builtin.set_fact:
-        dbt2resultsname: "tuner-final"
-
-    - name: Make sure DBT-2 target data dir and archive do not exist
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      become: true
-      loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
 
 - hosts: dbt2_driver
   name: Run DBT-2 with all EDB Postgres Tuner settings applied
@@ -375,8 +310,7 @@
         state: absent
       become: true
       loop:
-        - /tmp/{{ dbt2resultsname }}
-        - /tmp/{{ dbt2resultsname }}.tar.gz
+        - "{{ results_directory }}/{{ dbt2resultsname }}"
 
     - name: Calculate drivers per processor
       ansible.builtin.set_fact:
@@ -398,7 +332,7 @@
             -F {{ fpp }}
             -H {{ infra.servers.machines["dbt2-database"].private_ip }}
             -n
-            -o /tmp/{{ dbt2resultsname }}
+            -o {{ results_directory }}/{{ dbt2resultsname }}
             -s {{ (900000 / ((fpp | int) * ansible_processor_nproc)) | int }}
             -t 1
             -u
@@ -427,7 +361,7 @@
     # Ignore errors because dbt2-generate-report needs better return code logic.
     - name: Generate DBT-2 report
       ansible.builtin.command:
-        cmd: dbt2-generate-report -i /tmp/{{ dbt2resultsname }}
+        cmd: dbt2-generate-report -i {{ results_directory }}/{{ dbt2resultsname }}
       become: true
       become_user: "{{ pg_owner }}"
       async: 180000
@@ -438,14 +372,3 @@
     - name: Report generation output
       ansible.builtin.debug:
         var: result
-
-    - name: Create data archive
-      ansible.builtin.command:
-        cmd: >-
-          tar cvzf /tmp/{{ dbt2resultsname }}.tar.gz /tmp/{{ dbt2resultsname }}
-
-    - name: Fetch DBT-2 data files
-      ansible.builtin.fetch:
-        src: "/tmp/{{ dbt2resultsname }}.tar.gz"
-        dest: "./{{ dbt2resultsname }}/{{ dbt2resultsname }}.tar.gz"
-        flat: true
