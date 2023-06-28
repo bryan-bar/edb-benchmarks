@@ -23,5 +23,5 @@
     - name: Fetch HammerDB results file
       ansible.builtin.fetch:
         src: "/tmp/hammerdb.log"
-        dest: "./hammerdb.log"
+        dest: "{{ results_directory }}/hammerdb.log"
         flat: true
