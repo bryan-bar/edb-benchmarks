@@ -248,17 +248,17 @@
 - hosts: localhost
   name: post-processing on localhost
   gather_facts: false
-  become: true
+  become: false
   tasks:
-    # FIXME: Dirty hack in the interest of time.  Let the post-processing.py script
-    # process what it can and fix the broken parts later.  This also let's us not
-    # worry about whether all the files exists for the push_results steps, meaning
-    # we don't have to hack that for the time being.
     - name: Generate final data points and chart
-      ansible.builtin.command:
+      # FIXME: Dirty hack in the interest of time.  Let the post-processing.py script
+      # process what it can and fix the broken parts later.  This also let's us not
+      # worry about whether all the files exists for the push_results steps, meaning
+      # we don't have to hack that for the time being.
+      ansible.builtin.shell:
         cmd: |
           # Some distros use python for python3 since python2 is EOL
-          if command -v python3
+          if command -v python3 > /dev/null
           then
             PLAYBOOK_PYTHON="python3"
           else
@@ -266,7 +266,12 @@
           fi
           $PLAYBOOK_PYTHON {{ playbook_dir }}/post-processing.py || echo "ignoring errors"
 
-    - name: Move data to results directory
+    - name: Copy data to results directory
       ansible.builtin.copy:
         src: "./benchmark_data/"
         dest: "{{ results_directory }}/"
+
+    - name: Discard temporary data directory
+      ansible.builtin.file:
+        path: "./benchmark_data/"
+        state: absent
