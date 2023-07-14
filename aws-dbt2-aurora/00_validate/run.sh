@@ -1,8 +1,6 @@
 #!/bin/bash -eux
 
-echo "DBT2_DURATION: $DBT2_DURATION"
-echo "DBT2_WAREHOUSE: $DBT2_WAREHOUSE"
-echo "DBT2_CONNECTIONS: $DBT2_CONNECTIONS"
+python3 ./variables.py
 
 # Left as comments for template examples of possible latter validations
 # Assign possible number of processors
