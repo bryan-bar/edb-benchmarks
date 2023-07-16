@@ -1,0 +1,9 @@
+# Entry task that is called with the top level playbook with the edb_benchmarks role
+# Import all needed tasks here
+---
+- name: Validate Step Tasks
+  include_tasks: "{{ benchmark_directory }}/{{ step_name }}/{{ step_task }}"
+  loop:
+    - playbook-dbt2-validate.yml
+  loop_control:
+    loop_var: step_task

@@ -1,7 +1,4 @@
 #!/bin/bash -eux
-
-python3 ./variables.py
-
 # Left as comments for template examples of possible latter validations
 # Assign possible number of processors
 #NUM_OF_PROCS_1=1
@@ -9,6 +6,9 @@ python3 ./variables.py
 # Left as comments for template examples of possible latter validations
 # Perform division calculations
 #PROC_OPT_1=$(echo "$DBT2_CONNECTIONS / $NUM_OF_PROCS_1" | bc)
+
+ansible-playbook $BENCHMARK_DIRECTORY/$STEP_NAME/playbook-dbt2-validate.yml \
+   -e results_directory=$RESULTS_DIRECTORY
 
 if (( $(echo "$DBT2_WAREHOUSE < 10" | bc -l) )); then
    echo "DBT2_WAREHOUSE: $DBT2_WAREHOUSE";

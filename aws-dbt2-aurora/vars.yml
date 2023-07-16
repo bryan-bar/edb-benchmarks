@@ -1,7 +1,30 @@
+# Generic
+bucket_name: "ebac-reports"
+# benchmark_name: ""
+# results_directory: "{{ default(omit) }}"
+
+# Postgres
 pg_port: 5432
 pg_type: PG
 pg_version: 14
 pg_owner: postgres
 pg_group: postgres
 pg_superuser: postgres
-pg_password: "12Password!"
+pg_password: Password!23
+
+# ANSIBLE VARIABLES
+ansible_verbosity: 0
+
+# TERRAFORM VARIABLES
+# terraform_project_name: terraform
+# terraform_project_path: "{{ default(omit) }}"
+# terraform_infrasturcure_file
+# terraform_plan_filename: terraform.plan
+instance_type: "unset"
+storage_type: "unset"
+ssh_user: "rocky"
+
+# DBT2
+dbt2_duration: 15
+dbt2_warehouse: 15
+dbt2_connections: 64
