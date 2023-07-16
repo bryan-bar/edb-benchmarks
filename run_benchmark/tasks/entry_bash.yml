@@ -1,0 +1,35 @@
+# Call the entry task
+# Needed to short-circuit ansible loops
+- name: Step - {{ step_name }}
+  ansible.builtin.shell:
+    cmd: "{{ benchmark_directory }}/{{ step_name }}/run.sh"
+  register: running_step
+  environment:
+    # Setup
+    BENCHMARK_DIRECTORY: "{{ benchmark_directory }}"
+    STEP_NAME: "{{ step_name }}"
+    BENCHMARK_NAME: "{{ benchmark_name }}"
+    RESULTS_DIRECTORY: "{{ results_directory }}"
+    # Postgres
+    PG_PORT: "{{ pg_port }}"
+    PG_TYPE: "{{ pg_type }}"
+    PG_VERSION: "{{ pg_version }}"
+    PG_OWNER: "{{ pg_owner }}"
+    PG_GROUP: "{{ pg_group }}"
+    PG_SUPERUSER: "{{ pg_superuser }}"
+    PG_PASSWORD: "{{ pg_password }}"
+    # Ansible
+    ANSIBLE_VERBOSITY: "{{ ansible_verbosity }}"
+    # Terraform
+    TERRAFORM_PROJECT_NAME: "{{ terraform_project_name }}"
+    TERRAFORM_PROJECT_PATH: "{{ terraform_project_path }}"
+    TERRAFORM_PLAN_FILENAME: "{{ terraform_plan_filename }}"
+    TERRAFORM_INFRASTRUCTURE_FILE: "{{ terraform_infrastructure_file }}"
+    INSTANCE_TYPE: "{{ instance_type }}"    
+    STORAGE_TYPE: "{{ storage_type }}"
+    SSH_USER: "{{ ssh_user }}"
+    # DBT2
+    DBT2_DURATION: "{{ dbt2_duration }}"
+    DBT2_WAREHOUSE: "{{ dbt2_warehouse }}"
+    DBT2_CONNECTIONS: "{{ dbt2_connections }}"
+    BUCKET_NAME: "{{ bucket_name }}"

@@ -1,0 +1,64 @@
+---
+# Each benchmark should contain a vars file
+# By default, we check for environment variables
+# and are stored under benchmark_variable.
+#- name: Load variable file
+#  include_vars: "{{ benchmark_directory }}/vars.yml"
+
+# TODO type validations
+
+# Benchmarks should contain a steps with an execution order prefix
+# <step_index>_<step_name>
+- name: Find all step directories
+  ansible.builtin.find:
+    depth: 1
+    file_type: directory
+    follow: False
+    hidden: False
+    paths:
+      - "{{ benchmark_directory }}"
+    use_regex: True
+    patterns: "[0-9]{2}_.*"
+  register: all_steps
+
+- name: Map index to step name
+  ansible.builtin.set_fact:
+    step_mapping: "{{ ( step_mapping | default({}) ) | combine({ item.path | regex_search('[0-9]{2}') | int : item.path | basename }) }}"
+  loop: "{{ all_steps.files }}"
+
+- name: Call start scripts for the step
+  include_tasks: entry_bash.yml
+  loop: "{{ benchmark_steps | default(step_mapping | dictsort | map(attribute='1') | list) }}"
+  loop_control:
+    loop_var: step_name
+
+# Each step should contain a run.yml entry task
+# It is meant to import all other tasks that are needed by that step
+# Example run.yml
+# ---
+# - name: Validate Step Tasks
+#   include_tasks: "{{ benchmark_directory }}/{{ step_name }}/{{ step_task }}"
+#   loop:
+#     - playbook-dbt2-validate.yml
+#   loop_control:
+#     loop_var: step_task
+
+#- name: Test
+#  debug:
+#    msg: "{{ step_mapping }}"
+
+#- name: Start Entry tasks
+#  include_tasks: entry_script.yml
+#  ansible.builtin.shell:
+#    cmd: bash "{{ benchmark_directory }}/{{ step_name }}/run.sh"
+#  loop: "{{ benchmark_steps | default(step_mapping | dictsort | map(attribute='1') | list) }}"
+#  loop_control:
+#    loop_var: step_name
+#  register: running_step
+#  failed_when: running_step.rc != 0
+
+#- name: Include Steps Entry tasks
+#  include_tasks: "{{ benchmark_directory }}/{{ step_name }}/run.yml"
+#  loop: "{{ benchmark_steps | default(step_mapping | dictsort | map(attribute='1') | list) }}"
+#  loop_control:
+#    loop_var: step_name

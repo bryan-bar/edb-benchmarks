@@ -1,0 +1,13 @@
+---
+# Entry playbook to execute the run_benchmark role
+# Pass in the benchmark to run and the steps to run
+- hosts: localhost
+  name: Check variables
+  gather_facts: false
+  vars:
+    - benchmark_directory: "{{ playbook_dir }}/aws-dbt2-aurora"
+    #- benchmark_steps:
+    #  - 00_validate
+
+  roles:
+    - "{{ playbook_dir }}/run_benchmark"

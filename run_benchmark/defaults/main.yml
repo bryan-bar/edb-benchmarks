@@ -1,0 +1,34 @@
+---
+# defaults file for run_benchmark
+# All variables should either be omitted or grabbed from the environment
+
+# Generic
+ENV_BENCHMARK_DIRECTORY: "{{ role_dir }}/aws-dbt2-aurora"
+ENV_BUCKET_NAME: "{{ lookup('env', 'BUCKET_NAME') | default('ebac-reports', True) }}"
+ENV_RESULTS_DIRECTORY: "{{ benchmark_directory }}/results"
+ENV_BENCHMARK_NAME: default('None', True) # created at runtime
+
+# Postgres
+ENV_PG_PORT: "{{ lookup('env', 'PG_PORT') | default(5432, True) }}"
+ENV_PG_TYPE: "{{ lookup('env', 'POSTGRES_TYPE') | default('PG', True) }}"
+ENV_PG_VERSION: "{{ lookup('env', 'POSTGRES_VERSION') | default(14, True) }}"
+ENV_PG_OWNER: "{{ lookup('env', 'POSTGRES_OWNER') | default('postgres', True) }}"
+ENV_PG_GROUP: "{{ lookup('env', 'POSTGRES_GROUP') | default('postgres', True) }}"
+ENV_PG_SUPERUSER: "{{ lookup('env', 'POSTGRES_SUPERUSER') | default('postgres', True) }}"
+ENV_PG_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') | default('12Password!', True) }}"
+
+# ANSIBLE
+ENV_ANSIBLE_VERBOSITY: "{{ lookup('env', 'ANSIBLE_VERBOSITY') | default(0, True) }}"
+
+# Terraform
+ENV_TERRAFORM_PROJECT_NAME: "{{ lookup('env', 'TERRAFORM_PROJECT_NAME') | default(omit) }}"
+ENV_TERRAFORM_PROJECT_PATH: "{{ lookup('env', 'TERRAFORM_PROJECT_PATH') | default(omit) }}"
+ENV_TERRAFORM_INFRASTRUCTURE_FILE: "{{ lookup('env', 'TERRAFORM_INFRASTRUCTURE_FILE') | default(omit) }}"
+ENV_INSTANCE_TYPE: "{{ lookup('env', 'INSTANCE_TYPE') | default(omit) }}"
+ENV_STORAGE_TYPE: "{{ lookup('env', 'STORAGE_TYPE') | default(omit) }}"
+ENV_SSH_UER: "{{ lookup('env', 'SSH_USER') | default(omit) }}"
+
+# DBT2
+ENV_DBT2_DURATION: "{{ lookup('env', 'DBT2_DURATION') | default(omit) }}"
+ENV_DBT2_WAREHOUSE: "{{ lookup('env', 'DBT2_WAREHOUSE') | default(omit) }}"
+ENV_DBT2_CONNECTIONS: "{{ lookup('env', 'DBT2_CONNECTIONS') | default(omit) }}"

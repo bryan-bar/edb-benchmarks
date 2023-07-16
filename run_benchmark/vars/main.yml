@@ -1,0 +1,32 @@
+---
+# vars file for run_benchmark
+# Generic
+bucket_name: "{{ BUCKET_NAME | default(ENV_BUCKET_NAME) | default('ebac-reports') }}"
+benchmark_name: "{{ BENCHMARK_NAME | default(ENV_BENCHMARK_NAME) | default('aws-dbt2-aurora') }}"
+results_directory: "{{ RESULTS_DIRECTORY | default(ENV_RESULTS_DIRECTORY) | default(benchmark_directory+'/results')}}"
+
+# Postgres
+pg_port: "{{ PG_PORT | default(ENV_PG_PORT) }}"
+pg_type: "{{ PG_TYPE | default(ENV_PG_TYPE) }}"
+pg_version: "{{ PG_VERSION | default(ENV_PG_TYPE) }}"
+pg_owner: "{{ PG_OWNER | default(ENV_PG_OWNER) }}"
+pg_group: "{{ PG_GROUP | default(ENV_PG_GROUP) }}" 
+pg_superuser: "{{ PG_SUPERUSER | default(ENV_PG_SUPERUSER) }}"
+pg_password: "{{ PG_PASSWORD | default(ENV_PG_PASSWORD) }}"
+
+# ANSIBLE VARIABLES
+ansible_verbosity: "{{ ANSIBLE_VERBOSITY | default(ENV_ANSIBLE_VERBOSITY) }}"
+
+# TERRAFORM VARIABLES
+terraform_project_name: "{{ TERRAFORM_PROJECT_NAME | default(ENV_TERRAFORM_PROJECT_NAME) | default('terraform', True) }}"
+terraform_project_path: "{{ TERRAFORM_PROJECT_PATH | default(ENV_TERRAOFORM_PROJECT_PATH) | default(benchmark_directory+'/'+terraform_project_name, True) }}"
+terraform_infrastructure_file: "{{ TERRAFORM_INFRASTRUCTURE_FILE | default(ENV_TERRAFORM_INFRASTRUCTURE_FILE) | default(benchmark_directory+'/infrastructure.yml', True) }}"
+terraform_plan_filename: "{{ TERRAFORM_PLAN_FILENAME | default(ENV_TERRAFORM_PLAN_FILENAME) | default('terraform.plan', True) }}"
+instance_type: "{{ INSTANCE_TYPE | default(ENV_INSTANCE_TYPE) }}"
+storage_type: "{{ STORAGE_TYPE | default(ENV_STORAGE_TYPE) }}"
+ssh_user: "{{ SSH_USER | default(ENV_SSH_USER) | default('rocky', True) }}"
+
+# DBT2
+dbt2_duration: "{{ DBT2_DURATION | default(ENV_DBT2_DURATION) }}"
+dbt2_warehouse: "{{ DBT2_WAREHOUSE | default(ENV_DBT2_WAREHOUSE) }}"
+dbt2_connections: "{{ DBT2_CONNECTIONS | default(ENV_DBT2_CONNECTIONS) }}"
