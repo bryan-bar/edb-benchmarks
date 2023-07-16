@@ -3,7 +3,6 @@
 export ANSIBLE_PIPELINING=true
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false
-TERRAFORM_PROJECT_PATH="../terraform"
 
 # Run the benchmark
 ansible-playbook \
