@@ -1,0 +1,25 @@
+---
+# - name: Validate Step Tasks
+#   include_tasks: "{{ benchmark_directory }}/{{ step_name }}/{{ step_task }}"
+#   loop:
+#     - playbook-dbt2-validate.yml
+#   loop_control:
+#     loop_var: step_task
+#- name: Run entry script
+#  ansible.builtin.shell:
+#    cmd: "{{ benchmark_directory }}/{{ step_name }}/run.sh"
+#  environment:
+#    TERRAFORM_PROJECT_NAME: "terraform"
+#    BENCHMARK_DIRECTORY: "{{ benchmark_directory }}"
+#    TERRAFORM_PROJECT_PATH: "{{ benchmark_directory }}/terraform"
+#    TERRAFORM_PLAN_FILENAME: "terraform.plan"
+#    INFRASTRUCTURE_FILE: "{{ benchmark_directory }}/infrastructure.yml"
+#    RESULTS_DIRECTORY: "{{ results_directory }}"
+
+- hosts: localhost
+  name: Generate Terraform infrastructure file
+  tasks:
+  - name: Generate files
+    ansible.builtin.template:
+      src: "{{ template_file | default('./templates/infrastructure.yml.j2', True) }}"
+      dest: "{{ dest_file | default('../infrastructure.yml', True) }}"
