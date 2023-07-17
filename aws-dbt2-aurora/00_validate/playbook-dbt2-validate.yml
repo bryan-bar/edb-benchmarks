@@ -6,11 +6,29 @@
   collections:
     - edb_devops.edb_postgres
 
-  tasks:       
+  tasks:
+  - name: Extract environment variables
+    set_fact:
+      bash_variables: "{{ lookup('file', env_file) | split('\n') | select('match', '^\\s*[^#][^=]*') | map('regex_replace', '^(export\\s)*([^=]*).*$', '\\2') }}"
+  
+  - name: Generate vars file based on environment variables
+    copy:
+      content: |
+        # Generated within validation step with use of {{ env_file }}
+        # lowercase ansible variables mapped to UPPERCASE bash environment variables
+        {% for variable in bash_variables %}
+        {{ variable | lower }}: "{{ '{{' }} lookup('env', '{{ variable | upper }}') {{ '}}' }}"
+        {% endfor %}
+      dest: "{{ vars_file }}"
+
+  - name: Include generated vars file
+    include_vars: "{{ vars_file }}"
+
   - name: TEST
     local_action:
       module: ansible.builtin.debug
       msg: "test"
+
   - name: RESULTS_DIRECTORY
     ansible.builtin.debug:
       msg: "{{ results_directory }}"

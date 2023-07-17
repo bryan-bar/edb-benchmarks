@@ -2,8 +2,8 @@
 # Each benchmark should contain a vars file
 # By default, we check for environment variables
 # and are stored under benchmark_variable.
-#- name: Load variable file
-#  include_vars: "{{ benchmark_directory }}/vars.yml"
+- name: Load variable file
+  include_vars: "{{ benchmark_directory }}/vars.yml"
 
 # TODO type validations
 

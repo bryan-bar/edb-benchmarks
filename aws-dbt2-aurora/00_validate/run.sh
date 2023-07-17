@@ -7,8 +7,21 @@
 # Perform division calculations
 #PROC_OPT_1=$(echo "$DBT2_CONNECTIONS / $NUM_OF_PROCS_1" | bc)
 
-ansible-playbook $BENCHMARK_DIRECTORY/$STEP_NAME/playbook-dbt2-validate.yml \
-   -e results_directory=$RESULTS_DIRECTORY
+# Save current path and change to script directory
+RUNDIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+ORIGINAL_DIR=$(pwd)
+cd $RUNDIR
+
+# Expand any needed paths
+RESULTS_DIRECTORY=$(realpath "$RESULTS_DIRECTORY")
+TERRAFORM_PROJECT_PATH=$(realpath "$TERRAFORM_PROJECT_PATH")
+VARS_FILE=$(realpath "$VARS_FILE")
+ENV_FILE=$(realpath "$ENV_FILE")
+
+PLAYBOOK=${RUNDIR}/playbook-dbt2-validate.yml
+ansible-playbook $PLAYBOOK \
+   -e "vars_file=$VARS_FILE" \
+   -e "env_file=$ENV_FILE"
 
 if (( $(echo "$DBT2_WAREHOUSE < 10" | bc -l) )); then
    echo "DBT2_WAREHOUSE: $DBT2_WAREHOUSE";
@@ -28,3 +41,6 @@ fi
 #   echo "DBT2 Connections is too low, causes zero division error!!!"
 #   exit 1
 #fi
+
+# Return
+cd "$ORIGINAL_DIR"

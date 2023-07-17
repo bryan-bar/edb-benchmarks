@@ -1,14 +1,23 @@
 #!/bin/bash -eux
 
+# Save current path and change to script directory
+RUNDIR=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+ORIGINAL_DIR=$(pwd)
+cd $RUNDIR
+
+# Expand any needed paths
+RESULTS_DIRECTORY=$(realpath "$RESULTS_DIRECTORY")
+TERRAFORM_PROJECT_PATH=$(realpath "${TERRAFORM_PROJECT_PATH}/${TERRAFORM_PROJECT_NAME}")
+VARS_FILE=$(realpath "$VARS_FILE")
+
 export ANSIBLE_PIPELINING=true
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false
+VARS_FILE=${RUNDIR}/../vars.yml
 
 ansible-playbook \
-	-u ${SSH_USER} \
-	--private-key ${TERRAFORM_PROJECT_PATH}/ssh-id_rsa \
-	-i ../inventory.yml \
-	-e "@../vars.yml" \
-	-e "terraform_project_path=${TERRAFORM_PROJECT_PATH}" \
-	-e "dbt2_warehouse=${DBT2_WAREHOUSE}" \
+	-i ${TERRAFORM_PROJECT_PATH}/inventory.yml \
+	-e "@$VARS_FILE" \
 	./playbook-dbt2-build-db.yml
+
+cd $ORIGINAL_DIR

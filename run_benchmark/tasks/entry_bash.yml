@@ -1,8 +1,10 @@
 # Call the entry task
-# Needed to short-circuit ansible loops
+# Needed to short-circuit ansible loop
 - name: Step - {{ step_name }}
   ansible.builtin.shell:
-    cmd: "{{ benchmark_directory }}/{{ step_name }}/run.sh"
+    cmd: "BASH_ENV=./environment {{ step_name }}/run.sh"
+  args:
+    chdir: "{{ benchmark_directory }}" 
   register: running_step
   environment:
     # Setup

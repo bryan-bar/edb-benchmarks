@@ -1,3 +1,4 @@
+#!/usr/bin/ansible-playbook
 ---
 # Entry playbook to execute the run_benchmark role
 # Pass in the benchmark to run and the steps to run

@@ -1,0 +1,73 @@
+# Basic template to generate
+# - DBT2 instance
+# - Aurora instance
+# Needed variables to generate template
+# - region
+#   - zone0
+#   - zone1
+# - instance_type
+#   - instance_size
+#   - instance_type
+#   - instance_iops
+# - pg_instance_type
+#   - pg_version
+#   - pg_superuser
+#   - pg_password
+#   - pg_port
+---
+aws:
+  cluster_name: DBT2-Aurora
+  ssh_user: rocky
+  operating_system:
+    name: Rocky-8-ec2-8.6-20220515.0.x86_64
+    owner: 679593333241
+  regions:
+    {{ region }}:
+      cidr_block: 10.0.0.0/16
+      zones:
+        {{ zone0 }}: 10.0.0.0/24
+        {{ zone1 }}: 10.0.1.0/24
+      service_ports:
+        - port: 22
+          protocol: tcp
+          description: "SSH"
+        - port: 30000
+          protocol: tcp
+          description: "DBT-2"
+        - port: 30000
+          protocol: udp
+          description: "DBT-2"
+        - port: 5432
+          protocol: tcp
+          description: "PostgreSQL"
+
+  machines:
+    dbt2-driver:
+      type: dbt2-driver
+      region: {{ region }}
+      zone: {{ zone0 }}
+      instance_type: {{ instance_type }}
+      volume:
+        type: gp2
+        size_gb: 50
+        iops: 5000
+        encrypted: false
+      tags:
+        type: dbt2-driver
+
+  aurora:
+    dbt2:
+      region: {{ region }}
+      zones:
+      - {{ zone0 }}
+      - {{ zone1 }}
+      count: 1
+      engine: aurora-postgresql
+      engine_version: {{ pg_version }}
+      instance_type: {{ pg_instance_type }}
+      dbname: "dbt2"
+      username: {{ pg_superuser }}
+      password: {{ pg_password }}
+      port: {{ pg_port }}
+      tags:
+        type: aurora
