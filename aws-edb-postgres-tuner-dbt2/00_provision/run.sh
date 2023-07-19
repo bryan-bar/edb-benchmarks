@@ -6,8 +6,8 @@ TERRAFORM_PROJECT_PATH="${SOURCEDIR}/../${TERRAFORM_PROJECT_NAME}"
 TERRAFORM_PLAN_FILENAME="terraform.plan"
 RESULTS_DIRECTORY="${SOURCEDIR}/../results"
 
-ansible-playbook $SOURCEDIR/generate.yml \
-      -e "template_file=$SOURCEDIR/../templates/infrastructure.yml.j2" \
+ansible-playbook "$SOURCEDIR/generate.yml" \
+      -e "template_file=$SOURCEDIR/templates/infrastructure.yml.j2" \
       -e "dest_file=$SOURCEDIR/../infrastructure.yml" \
       -e "@$SOURCEDIR/../vars.yml" \
       -e "region=us-east-1" \
