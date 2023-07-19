@@ -6,8 +6,8 @@ TERRAFORM_PROJECT_PATH="${SOURCEDIR}/../${TERRAFORM_PROJECT_NAME}"
 TERRAFORM_PLAN_FILENAME="terraform.plan"
 RESULTS_DIRECTORY="${SOURCEDIR}/../results"
 
-ansible-playbook $SOURCEDIR/generate.yml \
-      -e "template_file=$SOURCEDIR/../templates/infrastructure.yml.j2" \
+ansible-playbook "$SOURCEDIR/generate.yml" \
+      -e "template_file=$SOURCEDIR/templates/infrastructure.yml.j2" \
       -e "dest_file=$SOURCEDIR/../infrastructure.yml" \
       -e "@$SOURCEDIR/../vars.yml" \
       -e "region=us-east-1" \
@@ -18,7 +18,7 @@ ansible-playbook $SOURCEDIR/generate.yml \
       -e "pg_storage_properties=io2" \
       -e "pg_storage_size=4096" \
       -e "pg_storage_iops=64000" \
-      -e "pg_engine=postgres"
+      -e "pg_engine=postgres" \
       -e "pg_version=14" \
       -e "pg_password=1234567890zyx" \
       -e "ba_project_id=$BA_PROJECT_ID"
