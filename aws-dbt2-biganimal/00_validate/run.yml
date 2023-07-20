@@ -1,0 +1,26 @@
+- hosts: localhost
+  name: Generate variable file
+  gather_facts: false
+
+  tasks:
+    - name: Extract environment variables
+      set_fact:
+        bash_variables: "{{ \
+                        lookup('file', env_file) \
+                        | split('\n') \
+                        | select('match', '^\\s*[^#][^=]*') \
+                        | map('regex_replace', '^(export\\s)*([^=]*).*$', '\\2') \
+                        }}"
+
+    - name: Generate yaml file based on found variables
+      copy:
+        content: |
+          # Ansible Generated file inside of {{ playbook_dir }}
+          # lowercase anible variables mapped to UPPERCASE bash environment variables
+          {% for variable in bash_variables %}
+          {{ variable | lower }}: "{{ '{{' }} lookup('env', '{{ variable | upper }}') {{ '}}' }}"
+          {% endfor %}
+        dest: "{{ vars_file }}"
+
+    - name: Load generated variable file
+      include_vars: "{{ vars_file }}"
