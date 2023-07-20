@@ -5,3 +5,7 @@ servers.yml
 *.log
 *.swp
 *cache*
+
+# Generated files
+environment.yml
+infrastructure.yml
