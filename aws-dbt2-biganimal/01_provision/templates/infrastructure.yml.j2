@@ -1,3 +1,5 @@
+# Ansible Generated during the following step: 
+#  {{ playbook_dir }}
 # Basic template to generate
 # - DBT2 instance
 # - Aurora instance
@@ -18,6 +20,7 @@ aws:
   operating_system:
     name: Rocky-8-ec2-8.6-20220515.0.x86_64
     owner: 679593333241
+    ssh_user: rocky
   regions:
     {{ region }}:
       cidr_block: 10.0.0.0/16

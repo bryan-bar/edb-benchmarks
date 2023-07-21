@@ -9,7 +9,7 @@ export ANSIBLE_SSH_ARGS="-o ForwardX11=no -o UserKnownHostsFile=/dev/null"
 export ANSIBLE_SSH_PIPELINING=true
 export ANSIBLE_HOST_KEY_CHECKING=false
 
-ansible-playbook \
-	-i ${TERRAFORM_PROJECT_PATH}/inventory.yml \
-	-e "@../vars.yml" \
-	./playbook-deploy.yml
+ansible-playbook "${SOURCEDIR}/playbook-deploy.yml" \
+    -i "${TERRAFORM_PROJECT_PATH}/inventory.yml" \
+    -e "@$SOURCEDIR/../environment.yml" \
+    -e "@$SOURCEDIR/../vars.yml"
