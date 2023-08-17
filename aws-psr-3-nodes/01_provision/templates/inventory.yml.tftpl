@@ -37,5 +37,8 @@ all:
 %{     else ~}
           replication_type: asynchronous
 %{     endif ~}
+%{     for key, values in {for key, values in servers.machines: key=>values if values.tags.type == "primary"} ~}
+          upstream_node_private_ip: ${ values.private_ip }
+%{     endfor ~}
 %{   endif ~}
 %{ endfor ~}
