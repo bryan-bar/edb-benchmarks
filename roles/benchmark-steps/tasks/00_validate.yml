@@ -16,6 +16,7 @@
         terraform_project_name: "{{ terraform_project_name }}"
         terraform_project_path: "{{ terraform_project_path }}"
         terraform_plan_filename: "{{ terraform_plan_filename }}"
+        benchmark_name: "{{ benchmark_directory | basename }}"
 
   - name: Load input file
     ansible.builtin.include_vars:
