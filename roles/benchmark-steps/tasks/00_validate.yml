@@ -1,16 +1,14 @@
 ---
-  - name: Extract environment variables from bash file
-    ansible.builtin.set_fact:
-      env_yml_file: "{{ benchmark_directory }}/environment.yml"
-      vars_file: "{{ benchmark_directory }}/vars.yml"
-      input_file: "{{ benchmark_directory }}/input.yml"
-      interpolate_file: "{{ benchmark_directory }}/interpolate.yml"
-      credentials_file: "{{ benchmark_directory }}/credentials.yml"
+  - name: Check if vars file exists
+    ansible.builtin.stat:
+      path: "{{ input_file }}"
+    register: file_result
 
   - name: Load input file
     ansible.builtin.include_vars:
       file: "{{ input_file }}"
       name: user_input
+    when: file_result.stat.exists
 
   - name: Generate environment yaml file based on variable keys
     ansible.builtin.copy:
@@ -52,11 +50,6 @@
       name: vars_input
     when: file_result.stat.exists
 
-  - name: Set default vars
-    ansible.builtin.set_fact:
-      vars_input: {}
-    when: not file_result.stat.exists
-
   - name: Check if interpolate file exists
     ansible.builtin.stat:
       path: "{{ interpolate_file }}"
@@ -68,10 +61,6 @@
       name: interpolate_input
     when: file_result.stat.exists
 
-  - name: Set default vars
-    ansible.builtin.set_fact:
-      interpolate_input: {}
-    when: not file_result.stat.exists
 
   - name: Check if overrides is a file
     ansible.builtin.stat:
@@ -126,16 +115,16 @@
 
   - name: Create results directory
     ansible.builtin.file:
-      path: "{{ results_directory }}"
+      path: "{{ static_variables.results_directory }}"
       state: directory
 
   - name: Copy environment.yml file
     ansible.builtin.copy:
       src: "{{ env_yml_file }}"
-      dest: "{{ results_directory }}/{{ env_yml_file | basename }}"
+      dest: "{{ static_variables.results_directory }}/{{ env_yml_file | basename }}"
 
   - name: Create and copy stringified json
     ansible.builtin.copy:
       content: |
         {{ final | to_json(separators=(',',':'), sort_keys=true) }}
-      dest: "{{ results_directory }}/{{ (env_yml_file | basename | splitext)[0] }}.json"
+      dest: "{{ static_variables.results_directory }}/{{ (env_yml_file | basename | splitext)[0] }}.json"

@@ -3,14 +3,24 @@ interactive: "{{ lookup('env', 'INTERACTIVE') | default('false', true) | bool }}
 
 # stringified json or a json/yaml files full path
 overrides: "{{ lookup('env', 'OVERRIDES') | default('', true) | string }}"
+# variables from files saved into these variables
+vars_input: {}
+interpolate_input: {}
+user_input: {}
 
-default_variables: {}
+default_variables:
+  terraform_plan_filename: terraform.plan
+  terraform_project_name: terraform
 
 static_variables:
   root_directory: "{{ root_directory }}"
   benchmark_directory: "{{ benchmark_directory }}"
-  results_directory: "{{ results_directory }}"
-  terraform_project_name: "{{ terraform_project_name }}"
-  terraform_project_path: "{{ terraform_project_path }}"
-  terraform_plan_filename: "{{ terraform_plan_filename }}"
+  results_directory: "{{ benchmark_directory }}/results"
+  terraform_project_path: "{{ benchmark_directory }}/{{ default_variables.terraform_project_name }}"
   benchmark_name: "{{ benchmark_directory | basename }}"
+
+env_yml_file: "{{ benchmark_directory }}/environment.yml"
+vars_file: "{{ benchmark_directory }}/vars.yml"
+input_file: "{{ benchmark_directory }}/input.yml"
+interpolate_file: "{{ benchmark_directory }}/interpolate.yml"
+credentials_file: "{{ benchmark_directory }}/credentials.yml"
