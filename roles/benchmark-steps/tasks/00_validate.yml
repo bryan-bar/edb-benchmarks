@@ -7,17 +7,6 @@
       interpolate_file: "{{ benchmark_directory }}/interpolate.yml"
       credentials_file: "{{ benchmark_directory }}/credentials.yml"
 
-      default_variables: {}
-
-      static_variables:
-        root_directory: "{{ root_directory }}"
-        benchmark_directory: "{{ benchmark_directory }}"
-        results_directory: "{{ results_directory }}"
-        terraform_project_name: "{{ terraform_project_name }}"
-        terraform_project_path: "{{ terraform_project_path }}"
-        terraform_plan_filename: "{{ terraform_plan_filename }}"
-        benchmark_name: "{{ benchmark_directory | basename }}"
-
   - name: Load input file
     ansible.builtin.include_vars:
       file: "{{ input_file }}"
@@ -103,6 +92,20 @@
   - name: Set interpolate variable
     ansible.builtin.set_fact:
       interpolate: "{{ default_variables | combine(vars_input, env_yml_input, env_overrides, static_variables, recursive=true) }}"
+
+  - name: User input overrides
+    ansible.builtin.pause:
+      prompt: "Enter a value for variable: {{ item.key }}\noriginal value: {{ item.value }}\n"
+      echo: True
+    register: prompt_input
+    loop: "{{ interpolate | default({}) | dict2items }}"
+    when: interactive
+
+  - name: Update dictionary with user input
+    ansible.builtin.set_fact:
+      interpolate: "{{ interpolate | combine({item.item.key: (item.user_input | default(item.item.value, true) )}) }}"
+    loop: "{{ prompt_input.results }}"
+    when: interactive
 
   - name: Set final variable with interpolate_input
     ansible.builtin.set_fact:

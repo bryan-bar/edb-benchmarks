@@ -1,0 +1,16 @@
+---
+interactive: "{{ lookup('env', 'INTERACTIVE') | default('false', true) | bool }}"
+
+# stringified json or a json/yaml files full path
+overrides: "{{ lookup('env', 'OVERRIDES') | default('', true) | string }}"
+
+default_variables: {}
+
+static_variables:
+  root_directory: "{{ root_directory }}"
+  benchmark_directory: "{{ benchmark_directory }}"
+  results_directory: "{{ results_directory }}"
+  terraform_project_name: "{{ terraform_project_name }}"
+  terraform_project_path: "{{ terraform_project_path }}"
+  terraform_plan_filename: "{{ terraform_plan_filename }}"
+  benchmark_name: "{{ benchmark_directory | basename }}"
