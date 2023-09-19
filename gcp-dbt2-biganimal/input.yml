@@ -24,6 +24,9 @@ dbt2_duration: 3
 dbt2_warehouse: 1
 dbt2_rampup: 45
 
-# credentials
+# BigAnimal credentials
 ba_project_id: <secret>
 ba_bearer_token: <secret>
+# Google Credentials
+google_credentials: <secret>
+google_project: <secret>
