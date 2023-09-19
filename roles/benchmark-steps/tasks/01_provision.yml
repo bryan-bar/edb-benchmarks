@@ -1,0 +1,70 @@
+---
+  - name: Generate infrastructure file
+    ansible.builtin.template:
+      src: "{{ template_file }}"
+      dest: "{{ dest_file }}"
+
+  # edb-terraform saves a backup of infrastructure.yml in <project-name>/infrastructure.yml.bak
+  #   this also includes the edb-terraform version used to generate the files
+  # --destroy used to attempt to destroy and overwrite existing terraform projects (Requires edb-terraform v1.6.0)
+  - name: Create terraform project with EDB-Terraform
+    ansible.builtin.shell:
+      cmd: |
+        edb-terraform generate {% if user_templates is defined and user_templates %}--user-templates {{ user_templates }}{% endif %} \
+                        --project-name {{ terraform_project_name }} \
+                        --work-path {{ benchmark_directory }} \
+                        --infra-file {{ dest_file }} \
+                        --cloud-service-provider {{ cloud_service_provider }} \
+                        --destroy
+      chdir: "{{ benchmark_directory }}"
+    environment:
+      BA_PROJECT_ID: "{{ ba_project_id }}"
+
+  # .terraform.lock.hcl will be saved here by terraform to lock provider versions and can be reused
+  - name: Terraform Init
+    ansible.builtin.command:
+      cmd: terraform init
+      chdir: "{{ terraform_project_path }}"
+
+  # Save terraform plan for inspection/reuse
+  - name: Terraform Plan
+    ansible.builtin.command:
+      cmd: terraform plan -out={{ terraform_plan_filename }}
+      chdir: "{{ terraform_project_path }}"
+    environment:
+      # In most cases, secrets should be handled outside of ansible due to secrets being exposed in the output
+      GOOGLE_CREDENTIALS: "{{ google_credentials }}"
+      GOOGLE_PROJECT: "{{ google_project }}"
+      BA_BEARER_TOKEN: "{{ ba_bearer_token | default(None) }}"
+      BA_PROJECT_ID: "{{ ba_project_id | default(None) }}"
+
+  - name: Terraform Apply
+    ansible.builtin.command:
+      cmd: terraform apply -auto-approve {{ terraform_plan_filename }}
+      chdir: "{{ terraform_project_path }}"
+    environment:
+      # In most cases, secrets should be handled outside of ansible due to secrets being exposed in std-out/-err output/files
+      GOOGLE_CREDENTIALS: "{{ google_credentials }}"
+      GOOGLE_PROJECT: "{{ google_project }}"
+      BA_BEARER_TOKEN: "{{ ba_bearer_token | default(None) }}"
+      BA_PROJECT_ID: "{{ ba_project_id | default(None) }}"
+
+  - name: Create results directory
+    ansible.builtin.file:
+      path: "{{ results_directory }}"
+      state: directory
+
+  # .tfstate might contain secrets
+  # ssh short term keys currently used
+  # .terraform created at run-time and controlled by terraform CLI 
+  - name: Copy terraform files into results
+    ansible.builtin.shell:
+      cmd: |
+        rsync --archive \
+          --exclude="*tfstate*" \
+          --exclude="*ssh*" \
+          --exclude=".terraform/" \
+          --recursive \
+          "{{ terraform_project_path }}" \
+          "{{ results_directory }}/"
+      chdir: "{{ benchmark_directory }}"
