@@ -1,4 +1,10 @@
 ---
+# Required variables with full paths,
+# if omitted, fail early
+# - benchmark_directory
+# - root_directory
+
+# User input option
 interactive: "{{ lookup('env', 'INTERACTIVE') | default('false', true) | bool }}"
 
 # stringified json or a json/yaml files full path
@@ -24,3 +30,32 @@ vars_file: "{{ benchmark_directory }}/vars.yml"
 input_file: "{{ benchmark_directory }}/input.yml"
 interpolate_file: "{{ benchmark_directory }}/interpolate.yml"
 credentials_file: "{{ benchmark_directory }}/credentials.yml"
+
+# Terraform and CLI requirements
+#
+# aws credentials can be set as config file with the default profile
+# - default filepath: $HOME/.aws/credentials
+#   - default profile: [default]
+# currently unused
+# aws_profile: default
+
+# gcloud credentials can be set as a json file
+# When credentials are empty,
+# it makes use of the default credentials json file:
+# - default filepath: $HOME/.config/gcloud/application_default_credentials.json
+# - accounts filepath: $HOME/.config/gcloud/legacy_credentials/<ACCOUNT>/adc.json
+# A json object can also be passed in but it will be exposed in ansibles output
+google_credentials: ""
+# GOOGLE_PROJECT is still needed even if is set within the credentials json object
+google_project: ""
+
+# biganimal credentials for terraform requires an access token
+# Currently BigAnimal Provider (v0.6.0),
+# does not make use of the default file
+# - get_token.sh script:
+#   - Access tokens expire after 24 hours
+#   - Refresh tokens and its chain expire after 30 days
+# - BigAnimal CLI v2.x
+#   - default filepath: $HOME/.edb-cli/credentials.json
+#   - requires web-auth
+ba_bearer_token: "" # access token
