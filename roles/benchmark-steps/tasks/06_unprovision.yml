@@ -1,0 +1,10 @@
+  - name: Terraform Destroy
+    ansible.builtin.command:
+      cmd: terraform destroy -auto-approve
+      chdir: "{{ terraform_project_path }}"
+    environment:
+      # In most cases, secrets should be handled outside of ansible due to secrets being exposed in std-out/-err output/files
+      GOOGLE_CREDENTIALS: "{{ google_credentials }}"
+      GOOGLE_PROJECT: "{{ google_project }}"
+      BA_BEARER_TOKEN: "{{ ba_bearer_token }}"
+      BA_PROJECT_ID: "{{ ba_project_id }}"
