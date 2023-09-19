@@ -9,3 +9,5 @@ servers.yml
 # Generated files
 environment.yml
 infrastructure.yml
+credentials.yml
+results/
