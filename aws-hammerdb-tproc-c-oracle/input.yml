@@ -19,3 +19,5 @@ db_storage_iops: 15000
 tprocc_duration: 60
 tprocc_warehouse: 2000
 tprocc_vusers: 60
+
+cloud_service_provider: aws

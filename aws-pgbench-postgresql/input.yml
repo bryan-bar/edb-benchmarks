@@ -16,3 +16,5 @@ pgbench_mode: read-write
 pgbench_scale_factor: 20000
 client_end_duration: 400
 benchmark_duration: 1200
+
+cloud_service_provider: aws

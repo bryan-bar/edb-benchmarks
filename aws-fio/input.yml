@@ -14,6 +14,8 @@ storage_iops: 21667
 fio_duration: 1h
 fio_maxjobs: 300
 
+cloud_service_provider: aws
+
 # Credentials
 repo_username: <secret>
 repo_password: <secret>

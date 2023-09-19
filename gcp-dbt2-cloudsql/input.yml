@@ -24,6 +24,8 @@ dbt2_duration: 3600
 dbt2_warehouse: 10000
 dbt2_rampup: 45
 
+cloud_service_provider: gcloud
+
 # Google Credentials
 google_credentials: <secret>
 google_project: <secret>

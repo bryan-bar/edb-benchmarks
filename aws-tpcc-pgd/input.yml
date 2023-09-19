@@ -18,3 +18,5 @@ tpcc_loader_vusers: 75
 tpcc_min_vusers: 5
 tpcc_max_vusers: 100
 tpcc_step_vusers: 5
+
+cloud_service_provider: aws

@@ -27,5 +27,7 @@ dbt2_connections_max: 100
 dbt2_connections_step: 5
 dbt2_rampup: 1
 
+cloud_service_provider: aws
+
 # Credentials
 repo_token: <secret>

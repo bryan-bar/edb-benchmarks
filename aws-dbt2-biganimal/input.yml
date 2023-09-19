@@ -22,6 +22,8 @@ dbt2_warehouse: 10000
 dbt2_connections: 64
 dbt2_rampup: 45
 
+cloud_service_provider: aws
+
 # credentials
 ba_project_id: <secret>
 ba_bearer_token: <secret>

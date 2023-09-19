@@ -1,8 +1,9 @@
 - hosts: localhost
-  name: Generate Terraform infrastructure file
-  tasks:
+  name: Provision infrastructure
+  gather_facts: false
 
-  - name: Generate files
-    ansible.builtin.template:
-      src: "{{ template_file }}"
-      dest: "{{ dest_file }}"
+  tasks:
+    - name: Role - benchmark-steps | Task - 01_provision.yml
+      ansible.builtin.include_role:
+        name: benchmark-steps
+        tasks_from: 01_provision.yml

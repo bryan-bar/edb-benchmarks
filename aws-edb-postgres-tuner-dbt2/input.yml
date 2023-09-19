@@ -19,6 +19,8 @@ dbt2_warehouse: 3600
 dbt2_connections: 72
 dbt2_rampup: 15
 
+cloud_service_provider: aws
+
 # Credentials
 repo_username: <secret>
 repo_password: <secret>

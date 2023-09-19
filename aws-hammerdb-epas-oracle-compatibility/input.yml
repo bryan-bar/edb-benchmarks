@@ -17,3 +17,5 @@ pg_ssh_user: rocky
 tprocc_duration: 60
 tprocc_warehouse: 2000
 tprocc_vusers: 60
+
+cloud_service_provider: aws

@@ -22,6 +22,8 @@ tpcc_min_vusers: 1
 tpcc_max_vusers: 14
 tpcc_step_vusers: 1
 
+cloud_service_provider: aws
+
 # Credentials
 repo_username: <secret>
 repo_password: <secret>

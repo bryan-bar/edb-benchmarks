@@ -13,6 +13,8 @@ pg_ssh_user: rocky
 tpcc_warehouse: 2000
 tpcc_loader_vusers: 75
 
+cloud_service_provider: aws
+
 # Credentials
 repo_username: <secret>
 repo_password: <secret>
