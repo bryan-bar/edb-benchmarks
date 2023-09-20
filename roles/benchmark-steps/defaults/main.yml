@@ -23,7 +23,7 @@ static_variables:
   benchmark_directory: "{{ benchmark_directory }}"
   results_directory: "{{ benchmark_directory }}/results"
   terraform_project_path: "{{ benchmark_directory }}/{{ default_variables.terraform_project_name }}"
-  benchmark_name: "{{ benchmark_directory | basename }}"
+  benchmark_name: "{{ benchmark_directory | basename | upper | replace('-', '_') }}"
 
 env_yml_file: "{{ benchmark_directory }}/environment.yml"
 vars_file: "{{ benchmark_directory }}/vars.yml"

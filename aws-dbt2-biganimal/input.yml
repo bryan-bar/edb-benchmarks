@@ -1,6 +1,7 @@
 # lowercase anible variables will be mapped to UPPERCASE bash environment variables
 # these will be used as defaults in the case of empty inputs
 # credentials with <secret> will not be saved with a default and instead will only look at the environment
+bucket_name: ""
 ansible_verbosity: 0
 ssh_user: rocky
 region: us-east-1

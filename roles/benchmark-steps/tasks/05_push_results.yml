@@ -1,4 +1,11 @@
 ---
+  - name: Check if bucket_name is set
+    ansible.builtin.assert:
+      that:
+        - bucket_name is defined
+        - bucket_name
+      fail_msg: "'bucket_name' must be set for upload to AWS S3"
+
   - ansible.builtin.set_fact:
       default_directory: "{{ benchmark_name }}/{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S') }}/"
 

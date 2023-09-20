@@ -1,8 +1,7 @@
 # lowercase anible variables will be mapped to UPPERCASE bash environment variables
 # these will be used as defaults in the case of empty inputs
 # credentials with <secret> will not be saved with a default and instead will only look at the environment
-bucket_name: ebac-reports
-benchmark_name: AWS_DBT2_RDS
+bucket_name: ""
 ansible_verbosity: 0
 region: us-east-1
 zone0: us-east-1b
